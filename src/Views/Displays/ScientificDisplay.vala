@@ -63,23 +63,29 @@ namespace Pebbles {
             shift_label    = new Gtk.Label ("SHIFT");
             shift_label.get_style_context ().add_class ("pebbles_h4");
             shift_label.set_opacity (0.2);
+            shift_label.set_halign (Gtk.Align.END);
+            shift_label.hexpand = true;
 
             var angle_mode_display = new Gtk.Grid ();
             angle_mode_display.attach (deg_label,  0, 0, 1, 1);
             angle_mode_display.attach (rad_label,  1, 0, 1, 1);
             angle_mode_display.attach (grad_label, 2, 0, 1, 1);
             angle_mode_display.column_spacing = 10;
+            angle_mode_display.set_halign (Gtk.Align.START);
 
             lcd_status_bar.attach (angle_mode_display, 0, 0, 1, 1);
             lcd_status_bar.attach (memory_label, 1, 0, 1, 1);
             lcd_status_bar.attach (shift_label, 2, 0, 1, 1);
             lcd_status_bar.column_spacing = 205;
             lcd_status_bar.width_request = 530;
-            lcd_status_bar.set_halign (Gtk.Align.END);
+            lcd_status_bar.set_halign (Gtk.Align.FILL);
+            lcd_status_bar.hexpand = true;
 
             // Make LCD Answer label
             answer_label = new Gtk.Label (settings.sci_output_text);
             answer_label.set_halign (Gtk.Align.END);
+            answer_label.set_valign (Gtk.Align.END);
+            answer_label.vexpand = true;
             answer_label.get_style_context ().add_class ("pebbles_h1");
             var scrollable = new Gtk.ScrolledWindow (null, null);
             scrollable.add (answer_label);
@@ -93,9 +99,9 @@ namespace Pebbles {
             input_entry.set_has_frame (false);
             input_entry.set_text (settings.sci_input_text);
             input_entry.get_style_context ().add_class ("pebbles_h2");
-            input_entry.set_halign (Gtk.Align.START);
-            input_entry.width_request = 530;
-            input_entry.max_width_chars = 39;
+            input_entry.set_halign (Gtk.Align.FILL);
+            input_entry.hexpand = true;
+            input_entry.margin_bottom = 1;
             input_entry.activate.connect (() => {
                 display_off ();
                 get_answer_evaluate ();

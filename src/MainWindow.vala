@@ -397,8 +397,8 @@ namespace Pebbles {
 
             // Create Views Pane
             common_view = new Gtk.Stack ();
-            common_view.valign = Gtk.Align.CENTER;
-            common_view.halign = Gtk.Align.CENTER;
+            common_view.valign = Gtk.Align.FILL;
+            common_view.halign = Gtk.Align.FILL;
             common_view.add_named (scientific_view, "Scientific");
             common_view.add_named (calculus_view, "Calculus");
             common_view.add_named (programmer_view, "Programmer");

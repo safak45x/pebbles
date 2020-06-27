@@ -113,9 +113,10 @@ namespace Pebbles {
         }
 
         construct { 
-            halign = Gtk.Align.CENTER;
-            valign = Gtk.Align.CENTER;
+            halign = Gtk.Align.FILL;
+            valign = Gtk.Align.FILL;
             column_spacing = 1;
+            height_request = 400;
 
             // Handle inputs
             input_expression = new List <string> ();
@@ -130,11 +131,13 @@ namespace Pebbles {
             display_container.margin_end = 8;
             display_container.margin_top = 8;
             display_container.margin_bottom = 8;
+            display_container.vexpand = true;
             display_unit = new ScientificDisplay (this);
             display_container.pack_start (display_unit);
 
             // Make Input section on the left
             button_container_left = new Gtk.Grid ();
+            button_container_left.vexpand = true;
             button_container_left.height_request = 250;
             button_container_left.margin_start = 8;
             button_container_left.margin_end = 8;
@@ -144,6 +147,7 @@ namespace Pebbles {
 
             // Make Input section on the right
             button_container_right = new Gtk.Grid ();
+            button_container_right.vexpand = true;
             button_container_right.height_request = 250;
             button_container_right.margin_start = 8;
             button_container_right.margin_end = 8;
