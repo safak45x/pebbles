@@ -487,12 +487,12 @@ namespace Pebbles {
             word_length_button_label_update ();
 
             // Set up window attributes
-            this.set_default_size (900, 600);
-            this.set_size_request (900, 600);
+            this.set_default_size (748, 394);
+            this.set_size_request (748, 394);
 
             // Show all the stuff
             this.add (paned);
-            this.set_resizable (false);
+            //this.set_resizable (false);
             this.show_all ();
 
             update_caps_status ();
@@ -778,13 +778,21 @@ namespace Pebbles {
             } else {
                 this.move (settings.window_x, settings.window_y);
             }
+            this.resize (settings.window_w, settings.window_h);
+            if (settings.window_maximized) {
+                maximize ();
+            }
         }
 
         private void save_settings () {
-            int x, y;
+            int x, y, w, h;
             this.get_position (out x, out y);
+            this.get_size (out w, out h);
             settings.window_x = x;
             settings.window_y = y;
+            settings.window_w = w;
+            settings.window_h = h;
+            settings.window_maximized = is_maximized;
         }
 
         private void handle_focus () {
