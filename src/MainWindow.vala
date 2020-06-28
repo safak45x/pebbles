@@ -152,6 +152,7 @@ namespace Pebbles {
                     return true;
                 } else {
                     initialized = true;
+                    adjust_view ();
                     return false;
                 }
             });
@@ -284,9 +285,12 @@ namespace Pebbles {
             controls_overlay_item.add (new Granite.AccelLabel (_("Show Controls"), "F1"));
             var preferences_overlay_item = new Gtk.MenuItem ();
             preferences_overlay_item.add (new Granite.AccelLabel (_("Preferences"), "F2"));
+            var dark_mode_switch_item = new Gtk.MenuItem ();
+            dark_mode_switch_item.add (new Granite.AccelLabel (_("Dark Mode"), ""));
 
             settings_menu.append (controls_overlay_item);
             settings_menu.append (preferences_overlay_item);
+            settings_menu.append (dark_mode_switch_item);
             settings_menu.show_all();
 
             controls_overlay_item.activate.connect (() => {
@@ -385,7 +389,8 @@ namespace Pebbles {
             item_list = new Granite.Widgets.SourceList ();
             item_list.root.add (calc_category);
             item_list.root.add (conv_category);
-            item_list.width_request = 170;
+            item_list.width_request = 180;
+            item_list.hexpand = false;
             
             // Create Views
             scientific_view  = new Pebbles.ScientificView (this);
@@ -457,11 +462,21 @@ namespace Pebbles {
             //  paned.pack1 (item_list, false, false);
             //  paned.pack2 (common_view, false, false);
 
+            //  var item_list_column = new Hdy.Clamp ();
+            //  item_list_column.add (item_list);
+            //  item_list_column.set_maximum_size (140);
+
             main_leaflet = new Hdy.Leaflet ();
             main_leaflet.set_mode_transition_duration (250);
             main_leaflet.add (item_list);
+            main_leaflet.add (new Gtk.Separator (Gtk.Orientation.VERTICAL));
             main_leaflet.add (common_view);
+            main_leaflet.set_can_swipe_back (true);
             main_leaflet.set_transition_type (Hdy.LeafletTransitionType.OVER);
+
+            var main_deck = new Hdy.Deck();
+            //main_deck.can_swipe_back = true;
+            main_deck.add (main_leaflet);
 
             // Create View Events
             item_list.item_selected.connect ((item) => {
@@ -529,7 +544,7 @@ namespace Pebbles {
             //this.set_size_request (400, 394);
 
             // Show all the stuff
-            this.add (main_leaflet);
+            this.add (main_deck);
             //this.set_resizable (false);
             this.show_all ();
 
