@@ -126,7 +126,7 @@ namespace Pebbles {
             //Make fake LCD display
             display_container = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             display_container.height_request = 120;
-            display_container.width_request = 560;
+            //display_container.width_request = 560;
             display_container.margin_start = 8;
             display_container.margin_end = 8;
             display_container.margin_top = 8;
@@ -290,8 +290,9 @@ namespace Pebbles {
             // Put it together
             attach (display_container, 0, 0, 2, 1);
             attach (button_container_left, 0, 1, 1, 1);
-            attach (button_container_right, 1, 1, 1, 1);
-            set_column_homogeneous (true);
+            //attach (button_container_right, 1, 1, 1, 1);
+            //set_column_homogeneous (true);
+            width_request = 170;
             display_unit.input_entry.move_cursor (Gtk.MovementStep.DISPLAY_LINE_ENDS, 0, false);
         }
         public void hold_shift (bool hold) {

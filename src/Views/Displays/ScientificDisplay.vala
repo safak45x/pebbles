@@ -58,6 +58,8 @@ namespace Pebbles {
             grad_label     = new Gtk.Label ("GRA");
             grad_label.get_style_context ().add_class ("pebbles_h4");
             memory_label   = new Gtk.Label ("M");
+            memory_label.set_halign (Gtk.Align.CENTER);
+            memory_label.hexpand = true;
             memory_label.get_style_context ().add_class ("pebbles_h4");
             memory_label.set_opacity (0.2);
             shift_label    = new Gtk.Label ("SHIFT");
@@ -76,8 +78,7 @@ namespace Pebbles {
             lcd_status_bar.attach (angle_mode_display, 0, 0, 1, 1);
             lcd_status_bar.attach (memory_label, 1, 0, 1, 1);
             lcd_status_bar.attach (shift_label, 2, 0, 1, 1);
-            lcd_status_bar.column_spacing = 205;
-            lcd_status_bar.width_request = 530;
+            lcd_status_bar.width_request = 200;
             lcd_status_bar.set_halign (Gtk.Align.FILL);
             lcd_status_bar.hexpand = true;
 
@@ -136,7 +137,7 @@ namespace Pebbles {
             attach (lcd_separator, 0, 2, 1, 1);
             attach (input_entry, 0, 3, 1, 1);
 
-            width_request = 530;
+            width_request = 300;
         }
 
         public void set_shift_enable (bool s_on) {

@@ -14,6 +14,7 @@ i18n = import ('i18n')
 # Project arguments
 add_project_arguments (
     '-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name ()),
+    '-DHANDY_USE_UNSTABLE_API',
     language: 'c'
 )
 
@@ -34,6 +35,7 @@ dependencies = [
     dependency ('gobject-2.0'),
     dependency ('libsoup-2.4'),
     dependency ('json-glib-1.0'),
+    dependency('libhandy-1', version: '>=0.80.0'),
     meson.get_compiler ('vala').find_library ('posix'),
     meson.get_compiler ('c').find_library ('m', required : false),
     meson.get_compiler ('c').find_library ('X11', required : false)
