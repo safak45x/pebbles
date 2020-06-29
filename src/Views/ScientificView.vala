@@ -90,6 +90,9 @@ namespace Pebbles {
 
         // Toolbar
         Gtk.Revealer bottom_button_bar_revealer;
+        StyledButton toolbar_view_functions_buttons_button;
+        public StyledButton toolbar_ans_button;
+        StyledButton toolbar_result_button;
 
         // Scietific Calculator Memory Store
         private double _memory_reserve;
@@ -130,7 +133,7 @@ namespace Pebbles {
         public void sci_make_ui () {
             //Make fake LCD display
             display_container = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-            display_container.height_request = 120;
+            display_container.height_request = 138;
             //display_container.width_request = 560;
             display_container.margin_start = 8;
             display_container.margin_end = 8;
@@ -292,23 +295,21 @@ namespace Pebbles {
             button_container_right.set_column_homogeneous (true);
             button_container_right.set_row_homogeneous (true);
 
-            var toolbar_view_functions_buttons_button = new StyledButton ("<i> ƒ </i>");
+            toolbar_view_functions_buttons_button = new StyledButton ("<i> ƒ </i>");
             toolbar_view_functions_buttons_button.get_style_context ().add_class ("Pebbles_Buttons_Function");
             toolbar_view_functions_buttons_button.get_style_context ().remove_class ("image-button");
-            toolbar_view_functions_buttons_button.hexpand = true;
-            toolbar_view_functions_buttons_button.margin = 2;
+            toolbar_view_functions_buttons_button.halign = Gtk.Align.START;
 
-            var toolbar_ans_button = new StyledButton ("Ans");
+            toolbar_ans_button = new StyledButton ("Ans");
             toolbar_ans_button.get_style_context ().add_class ("Pebbles_Buttons_Function");
             toolbar_ans_button.get_style_context ().remove_class ("image-button");
-            toolbar_ans_button.hexpand = true;
-            toolbar_ans_button.margin = 2;
+            toolbar_ans_button.halign = Gtk.Align.END;
+            toolbar_ans_button.sensitive = false;
 
-            var toolbar_result_button = new StyledButton (" = ", _("Result"), {"Return"});
+            toolbar_result_button = new StyledButton (" = ");
             toolbar_result_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
             toolbar_result_button.get_style_context ().remove_class ("image-button");
             toolbar_result_button.hexpand = true;
-            toolbar_result_button.margin = 2;
 
             button_leaflet = new Hdy.Leaflet ();
             button_leaflet.add (button_container_left);
@@ -321,10 +322,17 @@ namespace Pebbles {
             bottom_button_bar_revealer = new Gtk.Revealer ();
             var bottom_toolbar = new Gtk.ActionBar ();
             bottom_toolbar.height_request = 40;
+
+            var toolbox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 2);
+            toolbox.set_homogeneous (true);
+            toolbox.pack_start (toolbar_view_functions_buttons_button);
+            toolbox.pack_start (toolbar_result_button);
+            toolbox.pack_end (toolbar_ans_button);
+            toolbox.margin = 8;
+            toolbox.margin_start = 4;
+            toolbox.margin_end = 4;
             
-            bottom_toolbar.pack_start (toolbar_view_functions_buttons_button);
-            bottom_toolbar.pack_end (toolbar_result_button);
-            bottom_toolbar.pack_end (toolbar_ans_button);
+            bottom_toolbar.pack_start (toolbox);
 
 
             bottom_button_bar_revealer.add (bottom_toolbar);
@@ -345,6 +353,16 @@ namespace Pebbles {
             shift_held = hold;
             display_unit.set_shift_enable (hold);
             set_alternative_button ();
+        }
+
+        private void toggle_leaf () {
+            if (!button_leaflet.get_child_transition_running ()) {
+                if (button_leaflet.get_visible_child () == button_container_left) {
+                    button_leaflet.set_visible_child (button_container_right);
+                } else {
+                    button_leaflet.set_visible_child (button_container_left);
+                }
+            }
         }
         
         public void set_alternative_button () {
@@ -477,12 +495,24 @@ namespace Pebbles {
                     bottom_button_bar_revealer.set_reveal_child (false);
                 }
             });
+            toolbar_view_functions_buttons_button.clicked.connect (() => {
+                toggle_leaf ();
+            });
             memory_reserve = double.parse (settings.sci_memory_value);
             result_button.button_press_event.connect ((event) => {
                 display_unit.display_off ();
                 return false;
             });
             result_button.button_release_event.connect (() => {
+                display_unit.display_on ();
+                display_unit.get_answer_evaluate ();
+                return false;
+            });
+            toolbar_result_button.button_press_event.connect ((event) => {
+                display_unit.display_off ();
+                return false;
+            });
+            toolbar_result_button.button_release_event.connect (() => {
                 display_unit.display_on ();
                 display_unit.get_answer_evaluate ();
                 return false;
@@ -693,6 +723,9 @@ namespace Pebbles {
             });
             
             last_answer_button.clicked.connect (() => {
+                display_unit.insert_text ("ans ");
+            });
+            toolbar_ans_button.clicked.connect (() => {
                 display_unit.insert_text ("ans ");
             });
         }

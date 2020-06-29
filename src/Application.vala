@@ -127,7 +127,7 @@ namespace Pebbles {
         }
         private void adjust_font_responsive (Gdk.EventConfigure event) {
             try {
-                var target_size_h1 = (int)map_range (double.max((double) event.height/600, 1), 1, 2, 35, 120);
+                var target_size_h1 = (int)map_range (double.max((double) event.height/600, 1), 1, 2, 40, 120);
                 var target_size_h2 = (int)map_range (double.max((double) event.height/600, 1), 1, 2, 20, 50);
                 var target_size_h4 = (int)map_range (double.max((double) event.height/600, 1), 1, 2, 10, 20);
                 var css = DISPLAY_FONT_SIZE_TEMPLATE.printf(target_size_h1, target_size_h2, target_size_h4);

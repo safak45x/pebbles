@@ -469,7 +469,7 @@ namespace Pebbles {
             main_leaflet = new Hdy.Leaflet ();
             main_leaflet.set_mode_transition_duration (250);
             main_leaflet.add (item_list);
-            main_leaflet.add (new Gtk.Separator (Gtk.Orientation.VERTICAL));
+            // main_leaflet.add (new Gtk.Separator (Gtk.Orientation.VERTICAL));
             main_leaflet.add (common_view);
             main_leaflet.set_can_swipe_back (true);
             main_leaflet.set_transition_type (Hdy.LeafletTransitionType.OVER);
