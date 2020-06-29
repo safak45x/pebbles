@@ -85,6 +85,12 @@ namespace Pebbles {
         string constant_label_2;
         string constant_desc_2;
 
+        // Button Leaflet
+        Hdy.Leaflet button_leaflet;
+
+        // Toolbar
+        Gtk.Revealer bottom_button_bar_revealer;
+
         // Scietific Calculator Memory Store
         private double _memory_reserve;
         private double memory_reserve {
@@ -115,7 +121,6 @@ namespace Pebbles {
         construct { 
             halign = Gtk.Align.FILL;
             valign = Gtk.Align.FILL;
-            column_spacing = 1;
             height_request = 400;
 
             // Handle inputs
@@ -287,11 +292,52 @@ namespace Pebbles {
             button_container_right.set_column_homogeneous (true);
             button_container_right.set_row_homogeneous (true);
 
+            var toolbar_view_functions_buttons_button = new StyledButton ("<i> ƒ </i>");
+            toolbar_view_functions_buttons_button.get_style_context ().add_class ("Pebbles_Buttons_Function");
+            toolbar_view_functions_buttons_button.get_style_context ().remove_class ("image-button");
+            toolbar_view_functions_buttons_button.hexpand = true;
+            toolbar_view_functions_buttons_button.margin = 2;
+
+            var toolbar_ans_button = new StyledButton ("Ans");
+            toolbar_ans_button.get_style_context ().add_class ("Pebbles_Buttons_Function");
+            toolbar_ans_button.get_style_context ().remove_class ("image-button");
+            toolbar_ans_button.hexpand = true;
+            toolbar_ans_button.margin = 2;
+
+            var toolbar_result_button = new StyledButton (" = ", _("Result"), {"Return"});
+            toolbar_result_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+            toolbar_result_button.get_style_context ().remove_class ("image-button");
+            toolbar_result_button.hexpand = true;
+            toolbar_result_button.margin = 2;
+
+            button_leaflet = new Hdy.Leaflet ();
+            button_leaflet.add (button_container_left);
+            button_leaflet.add (button_container_right);
+            button_leaflet.set_visible_child (button_container_left);
+            button_leaflet.hhomogeneous_unfolded = true;
+            button_leaflet.can_swipe_back = true;
+            button_leaflet.can_swipe_forward = true;
+            
+            bottom_button_bar_revealer = new Gtk.Revealer ();
+            var bottom_toolbar = new Gtk.ActionBar ();
+            bottom_toolbar.height_request = 40;
+            
+            bottom_toolbar.pack_start (toolbar_view_functions_buttons_button);
+            bottom_toolbar.pack_end (toolbar_result_button);
+            bottom_toolbar.pack_end (toolbar_ans_button);
+
+
+            bottom_button_bar_revealer.add (bottom_toolbar);
+            bottom_button_bar_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_UP;
+            
+
+            
+
             // Put it together
-            attach (display_container, 0, 0, 2, 1);
-            attach (button_container_left, 0, 1, 1, 1);
-            //attach (button_container_right, 1, 1, 1, 1);
-            //set_column_homogeneous (true);
+            attach (display_container, 0, 0, 1, 1);
+            attach (button_leaflet, 0, 1, 1, 1);
+            attach (bottom_button_bar_revealer, 0, 2, 1, 1);
+            set_column_homogeneous (true);
             width_request = 170;
             display_unit.input_entry.move_cursor (Gtk.MovementStep.DISPLAY_LINE_ENDS, 0, false);
         }
@@ -424,6 +470,13 @@ namespace Pebbles {
             }
         }
         private void sci_make_events () {
+            this.size_allocate.connect ((event) => {
+                if (button_leaflet.folded) {
+                    bottom_button_bar_revealer.set_reveal_child (true);
+                } else {
+                    bottom_button_bar_revealer.set_reveal_child (false);
+                }
+            });
             memory_reserve = double.parse (settings.sci_memory_value);
             result_button.button_press_event.connect ((event) => {
                 display_unit.display_off ();
